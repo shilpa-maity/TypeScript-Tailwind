@@ -1,0 +1,54 @@
+import React, { useState } from "react";
+import axios from "axios";
+
+const ApiConsumption = () => {
+  const [myUser, setMyUser] = useState<any>([]);
+
+  const loadUsers = async () => {
+    try {
+      const response = await axios.get("https://jsonplaceholder.typicode.com/users");
+      setMyUser(response.data);
+    } catch (error: any) {
+      alert(error);
+    }
+  };
+
+  return (
+    <div className="w-full max-w-3xl rounded-2xl bg-white shadow-lg p-6">
+      <h4 className="text-xl font-bold mb-4">API Data Consumption</h4>
+      <button
+        onClick={loadUsers}
+        className="px-4 py-2 mb-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+      >
+        Show Users
+      </button>
+
+      {myUser.length > 0 && (
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border border-slate-300 text-sm">
+            <thead>
+              <tr className="bg-slate-100">
+                <th className="border border-slate-300 px-4 py-2">Name</th>
+                <th className="border border-slate-300 px-4 py-2">Username</th>
+                <th className="border border-slate-300 px-4 py-2">Email</th>
+                <th className="border border-slate-300 px-4 py-2">City</th>
+              </tr>
+            </thead>
+            <tbody>
+              {myUser.map((user: any, index: number) => (
+                <tr key={index} className="hover:bg-slate-50">
+                  <td className="border border-slate-300 px-4 py-2">{user.name}</td>
+                  <td className="border border-slate-300 px-4 py-2">{user.username}</td>
+                  <td className="border border-slate-300 px-4 py-2">{user.email}</td>
+                  <td className="border border-slate-300 px-4 py-2">{user.address.city}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ApiConsumption;
