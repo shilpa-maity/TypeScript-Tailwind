@@ -1,0 +1,12 @@
+type UserProps = {
+  name: string;
+  age: number;
+};
+
+const Propps = ({ name, age }: UserProps) => {
+  return <h2>{name} is {age} years old.</h2>;
+};
+
+export default Propps;
+
+
