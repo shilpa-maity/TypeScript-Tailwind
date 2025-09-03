@@ -1,0 +1,155 @@
+import React, { useState } from "react";
+import axios from "axios";
+
+const Form = () => {
+  type User = {
+    fname: string;
+    lname: string;
+    age: number;
+  };
+
+  const [user, setUser] = useState<User>({ fname: "Shilpa", lname: "Maity", age: 21 });
+  const [myUser, setMyUser] = useState<any>([]);
+  const [counter, setCounter] = useState<number>(0);
+
+  const handleChange = (event: any) => {
+    setUser({ ...user, [event.target.name]: event.target.value });
+  };
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    console.log(user);
+    alert("Hii " + user.fname + " " + user.lname);
+  };
+
+  const loadUsers = async () => {
+    try {
+      const response = await axios.get("https://jsonplaceholder.typicode.com/users");
+      setMyUser(response.data);
+    } catch (error: any) {
+      alert(error);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col items-center py-10 px-4">
+      {/* Counter App */}
+      <div className="w-full max-w-md rounded-2xl bg-white shadow-lg p-6 mb-10">
+        <h2 className="text-xl font-bold mb-4">Counter App</h2>
+        <p className="mb-4">Counter Value: <span className="font-semibold">{counter}</span></p>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setCounter(counter + 1)}
+            className="px-4 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
+          >
+            Increase
+          </button>
+          <button
+            onClick={() => setCounter(counter - 1)}
+            className="px-4 py-2 rounded-xl bg-red-600 text-white hover:bg-red-700"
+          >
+            Decrease
+          </button>
+          <button
+            onClick={() => setCounter(0)}
+            className="px-4 py-2 rounded-xl bg-gray-500 text-white hover:bg-gray-600"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+
+      {/* Form */}
+      <div className="w-full max-w-md rounded-2xl bg-white shadow-lg p-6 mb-10">
+        <h2 className="text-xl font-bold mb-4">User Form</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">First Name</label>
+            <input
+              type="text"
+              name="fname"
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Last Name</label>
+            <input
+              type="text"
+              name="lname"
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Age</label>
+            <input
+              type="number"
+              name="age"
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+            />
+          </div>
+
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              className="flex-1 px-4 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800"
+            >
+              Submit
+            </button>
+            <button
+              type="reset"
+              className="flex-1 px-4 py-2 rounded-lg border border-slate-300 hover:bg-slate-100"
+            >
+              Reset
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* API Data */}
+      <div className="w-full max-w-3xl rounded-2xl bg-white shadow-lg p-6">
+        <h4 className="text-xl font-bold mb-4">API Data Consumption</h4>
+        <button
+          onClick={loadUsers}
+          className="px-4 py-2 mb-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+        >
+          Show Users
+        </button>
+
+        {myUser.length > 0 && (
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse border border-slate-300 text-sm">
+              <thead>
+                <tr className="bg-slate-100">
+                  <th className="border border-slate-300 px-4 py-2">Name</th>
+                  <th className="border border-slate-300 px-4 py-2">Username</th>
+                  <th className="border border-slate-300 px-4 py-2">Email</th>
+                  <th className="border border-slate-300 px-4 py-2">City</th>
+                </tr>
+              </thead>
+              <tbody>
+                {myUser.map((user: any, index: number) => (
+                  <tr key={index} className="hover:bg-slate-50">
+                    <td className="border border-slate-300 px-4 py-2">{user.name}</td>
+                    <td className="border border-slate-300 px-4 py-2">{user.username}</td>
+                    <td className="border border-slate-300 px-4 py-2">{user.email}</td>
+                    <td className="border border-slate-300 px-4 py-2">{user.address.city}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Form;
